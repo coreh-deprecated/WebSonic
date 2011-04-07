@@ -1,0 +1,76 @@
+body {
+	margin: 0;
+	overflow: hidden;
+	background: #000;
+	color: white;
+	font-family: monospace;
+}
+
+#console {
+	display: none;
+	position: absolute;
+	left: 0;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	overflow: hidden;
+}
+
+#console > div {
+	background: rgba(127,127,127, 0.1);
+}
+
+#console > div > div {
+	padding: 4px;
+	color: rgba(255,255,255,0.3);
+	-moz-border-radius: 2px;
+	-webkit-border-radius: 2px;
+	border-radius: 2px;
+	font-size: 12px;
+}
+
+#console .warning {
+	color: rgba(255,200,0,1.0);
+	background: rgba(255,255,0,0.1);
+	text-shadow: 0px 1px 2px black;
+}
+
+#console .error {
+	background: rgba(255,0,0,0.5);
+	color: white;
+	text-shadow: 0px 1px 2px black;
+}
+
+#console .info {
+	color: white;
+	text-shadow: 0px 1px 2px black;			
+}
+
+canvas {
+	-webkit-transform: scale(1.0,1.0);
+}
+
+#hud {
+	position: absolute;
+	top: 0;
+	left: 0;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	padding: 0.5em;
+	text-transform: uppercase;
+	text-shadow: 0 1px 1px black;
+	font-size: 30px;
+}
+
+#hud strong {
+	color: #ee0;
+	width: 4em;
+	position: relative;
+	display: inline-block;
+}
+
+#hud span {
+	width: 4em;
+	display: inline-block;
+	text-align: right;
+}

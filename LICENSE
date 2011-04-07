@@ -1,0 +1,140 @@
+WebSonic Engine
+Copyright (C) 2010, 2011 by Marco Aurélio "Mark the Echidna"
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+-------------------------------------------------------------------------------
+
+The license above covers all the source code of the WebSonic engine:
+
+    index.html
+    js/*
+    css/*
+    tools/*
+    level/*
+    shader/*
+    
+-------------------------------------------------------------------------------
+    
+The 3d models and textures are covered by a Creative Commons BY-NC License:
+    
+    mesh/*
+    texture/*
+    
+-------------------------------------------------------------------------------
+    
+This distribution also includes external libraries on which WebSonic depends.
+They are:
+
+lib/jquery.js
+
+/*!
+ * jQuery JavaScript Library v1.4.2
+ * http://jquery.com/
+ *
+ * Copyright 2010, John Resig
+ * Dual licensed under the MIT or GPL Version 2 licenses.
+ * http://jquery.org/license
+ *
+ * Includes Sizzle.js
+ * http://sizzlejs.com/
+ * Copyright 2010, The Dojo Foundation
+ * Released under the MIT, BSD, and GPL Licenses.
+ *
+ * Date: Sat Feb 13 22:33:48 2010 -0500 
+ */
+    
+lib/sylvester.js
+
+// === Sylvester ===
+// Vector and Matrix mathematics modules for JavaScript
+// Copyright (c) 2007 James Coglan
+// 
+// Permission is hereby granted, free of charge, to any person obtaining
+// a copy of this software and associated documentation files (the "Software"),
+// to deal in the Software without restriction, including without limitation
+// the rights to use, copy, modify, merge, publish, distribute, sublicense,
+// and/or sell copies of the Software, and to permit persons to whom the
+// Software is furnished to do so, subject to the following conditions:
+// 
+// The above copyright notice and this permission notice shall be included
+// in all copies or substantial portions of the Software.
+// 
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+// THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+// FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+// DEALINGS IN THE SOFTWARE.
+
+lib/sylvester.addons.js
+
+This is a piece of sample code extracted from a WebGL tutorial. I could no 
+longer find the original source/author of the code, but a Google search for its
+first line: "// augment Sylvester some" revealed that it's in widespread use.
+
+I'm going to assume a MIT/BSD license here, since that's usual. If you're/know
+the original author, drop me a message and I'll attribute you/him. (Or, if you
+have problems with me using this code, drop me a message and I'll replace it
+with something else.)
+
+-------------------------------------------------------------------------------
+
+A Note About Sonic the Hedgehog Intelectual Property
+----------------------------------------------------
+
+"Sonic the Hedgehog" is a registered trademark of SEGA Corporation. Some 
+specific Sonic gameplay elements might be also patented by SEGA Corporation.
+
+All the code and assets included on this distribution are completely
+new/original material. This includes the textures, objects and the Sonic 
+3D model. NO CONTENT OR DATA "RIPPED" OR SOMEHOW "PIRATED" FROM ANY SONIC GAME
+IS INCLUDED ALONG WITH THIS CODE.
+
+The Sonic-related content on this distribution therefore violates NO COPYRIGHTS,
+but might violate trademark and patent rights, since it's used without express,
+written permission from SEGA.
+
+This is considered NOT TO be the case, due to:
+
+  1. The purely artistic/hobby nature of the content, comparable to
+  fanfiction, fan-art or sculpures depicting Sonic the Hedgehog;
+  
+  2. The strictly non-commercial license on which the Sonic related assets
+  are distributed;
+
+  3. The existing good/strong bounds between the personal from SEGA and the 
+  Sonic fanbase;
+  
+  4. Large amounts of similar, precedent material regarding which SEGA
+  Corporation expressed no opposition or no concern (hundreds of existing Sonic
+  fan-games)
+
+If you make use of the source on this distribution to create, specifically,
+a Sonic fan-game, you're STRONGLY ADVISED not to directly or indirectly profit 
+from it. (e.g. selling licenses or advertising in game) Unless, of course, 
+you're authorized to do so by SEGA Corporation (which is totally cool, then.)
+
+This is obviously NOT an obligation, since the code is MIT licensed, but not
+following this advice WILL likely get you into legal trouble, and may backfire 
+at the Sonic fan-gaming community as a whole.
+
+If you make use of the source code on this distribution for anything else, do
+as you please. Just honor the MIT license.

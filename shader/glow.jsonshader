@@ -1,0 +1,121 @@
+{"uniforms": [ "u_image" ],
+	"attributes": ["a_position", "a_texCoords" ],
+	"vertexShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+	
+		uniform sampler2D u_image;
+		
+		attribute vec3 a_position;
+		attribute vec2 a_texCoords;
+
+		varying vec2 v_texCoords;
+	
+		void main(void) {
+			gl_Position = vec4(a_position, 1.0);
+			v_texCoords = a_texCoords;
+		}	
+	",
+	"fragmentShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec2;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+
+		uniform sampler2D u_image;
+
+		varying vec2 v_texCoords;
+
+		void main(void) {
+			const float frac = 600.0;
+			const float frac2 = 450.0;
+//			float x = 0.5;
+			float i = 0.0;
+			vec4 sumGlow = vec4(0.0,0.0,0.0,0.0);
+			vec4 maxGlow = vec4(0.0,0.0,0.0,0.0);
+			for(float x = 0.5; x < 10.0; x+=3.0/10.0) {
+/*			 	vec4 thisGlow = (texture2D(u_image, v_texCoords + vec2(x/frac,x/frac)) +
+				texture2D(u_image, v_texCoords + vec2(-x/frac,x/frac)) +
+				texture2D(u_image, v_texCoords + vec2(x/frac,-x/frac)) +
+				texture2D(u_image, v_texCoords + vec2(-x/frac,-x/frac)) +
+				texture2D(u_image, v_texCoords + vec2(0.0,-x/frac2)) +
+				texture2D(u_image, v_texCoords + vec2(-x/frac2,0.0)) +
+				texture2D(u_image, v_texCoords + vec2(0.0, x/frac2)) +
+				texture2D(u_image, v_texCoords + vec2(x/frac2, 0.0))) * (10.0-x);// * (1.0 + vec4(cos(x), sin(x), cos(x+2.0), 1.0)/5.0); */
+				vec4 thisGlow = vec4(0.0,0.0,0.0,0.0);
+				vec4 c;
+				float len;
+				c = texture2D(u_image, v_texCoords + vec2(x/frac,x/frac));
+				len = length(c.xyz);
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - c/len;
+				}
+				c = texture2D(u_image, v_texCoords + vec2(-x/frac,x/frac));
+				len = length(c.xyz);
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - c/len;
+				}
+				c = texture2D(u_image, v_texCoords + vec2(x/frac,-x/frac));
+				len = length(c.xyz);
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - c/len;
+				}
+				c = texture2D(u_image, v_texCoords + vec2(-x/frac,-x/frac));
+				len = length(c.xyz);
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - c/len;
+				}
+/*				c = texture2D(u_image, v_texCoords + vec2(x/frac2,0.0));
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - normalize(c);
+				}
+				c = texture2D(u_image, v_texCoords + vec2(-x/frac2,0.0));
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - normalize(c);
+				}
+				c = texture2D(u_image, v_texCoords + vec2(0.0,x/frac2));
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - normalize(c);
+				}
+				c = texture2D(u_image, v_texCoords + vec2(0.0,-x/frac2));
+				if (length(c.xyz) > 1.0) {
+					thisGlow += c - normalize(c);
+				}*/
+				thisGlow *= (10.0-x);
+				maxGlow = max(maxGlow, thisGlow);
+				sumGlow += thisGlow;
+//				x += 3.0/1.0;
+				i += (10.0-x) * 3.0/1.0;//* (1.0 + vec4(cos(x), sin(x), cos(x+2.0), 1.0)/5.0);
+			}
+			sumGlow /= 2.0 * i;
+			maxGlow /= 2.0 * (i / 4.0);
+			
+			float len = length(maxGlow.rgb);
+//			float lengthPow = min(len, 10.0/10.0) / 5.0;
+//			glow = glow * pow(lengthPow, 2.0);
+			vec4 glow;
+			if (length(sumGlow.rgb) > 0.0) {
+				glow = vec4(normalize(sumGlow.rgb), 1.0);
+			} else {
+				glow = sumGlow;
+			}
+//			len = pow(max(len, 0.0), 1.0);
+			glow = glow * len;
+
+/*			vec4 color = vec4(texture2D(u_image, v_texCoords * vec2(101.0/100.0, 100.0/100.0) + vec2(0.0,0.0)).r,
+				texture2D(u_image, v_texCoords * vec2(100.0/100.0, 101.0/100.0) + vec2(0.0,0.0)).g,
+				texture2D(u_image, v_texCoords * vec2(99.0/100.0, 100.0/100.0) + vec2(0.0,0.0)).b,
+				1.0);*/
+			vec4 color = texture2D(u_image, v_texCoords + vec2(0.0,0.0));
+
+			gl_FragColor = color + glow;
+
+			gl_FragColor = vec4(gl_FragColor.rgb, 1.0);
+		}
+	"
+}

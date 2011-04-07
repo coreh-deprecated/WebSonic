@@ -1,0 +1,122 @@
+{"uniforms": [ "u_cameraView",
+					"u_normalCameraView",
+					"u_modelView",
+					"u_normalModelView",
+					"u_projection",
+					"u_diffuseMap",
+					"u_ghostMap",
+					"u_lightDirection",
+					"u_lightColor",
+					"u_ambientLightColor",
+					"u_levelShadowMap",
+					"u_time",
+					"u_levelSize",
+					"u_dynamicShadowMap",
+					"u_dynamicShadowMapPosition"],
+	"attributes": ["a_position", "a_normal", "a_texCoords"],
+	"vertexShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+	
+		attribute vec3 a_position;
+		attribute vec3 a_normal;
+		attribute vec2 a_texCoords;
+	
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_projection;
+		uniform mat4 u_normalCameraView;		
+		uniform mat4 u_normalModelView;
+
+		uniform sampler2D u_diffuseMap;
+	
+		varying vec2 v_texCoords;
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+	
+		void main(void) {
+			v_texCoords = a_texCoords;
+			v_normal = (u_normalCameraView * (u_normalModelView * vec4(a_normal, 0.0))).xyz;
+			v_globalPosition = u_modelView * vec4(a_position, 1.0);
+			v_localPosition = u_cameraView * v_globalPosition;
+			gl_Position = u_projection * v_localPosition;
+//			float distortion = (pow(v_localPosition.x, 2.0) + pow(v_localPosition.y, 2.0))/ 2000.0;
+//			gl_Position += vec4(-(distortion) * normalize(gl_Position.xy),sqrt(distortion),0.0);
+		}	
+	",
+	"fragmentShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec2;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+		varying vec2 v_texCoords;
+		
+		uniform sampler2D u_levelShadowMap;
+		uniform sampler2D u_diffuseMap;
+		uniform sampler2D u_ghostMap;
+		uniform sampler2D u_dynamicShadowMap;
+		uniform vec3 u_dynamicShadowMapPosition;
+		uniform vec3 u_levelSize;		
+		uniform vec3 u_lightDirection;
+		uniform vec4 u_lightColor;
+		uniform vec4 u_ambientLightColor;
+		uniform vec3 u_playerPosition;
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_normalCameraView;		
+		uniform float u_time;
+
+		void main(void) {
+			float z = - pow(v_localPosition.x * v_localPosition.x * 5.0 / 10.0 + v_localPosition.y * v_localPosition.y * 4.0, 1.0/2.0) * 6.0 / 10.0 + v_localPosition.z * 1.0 + v_localPosition.y * 12.0/10.0 + cos(v_localPosition.y/6.0 + u_time  * 6.0) * 2.0 + sin(v_localPosition.x/6.0 + u_time * 6.0) * 2.0;
+			if (z > -280.0) {
+				if (z > -270.0) {
+					vec4 textureColor = texture2D(u_ghostMap, v_texCoords);//*/vec2(v_texCoords.x + sin(v_localPosition.x*12.0 + u_time  * 3.0) / 100.0, v_texCoords.y + cos(v_localPosition.y*12.0 + u_time * 3.0) / 100.0));
+					if (textureColor.a > 20.0/100.0) {
+						gl_FragColor = vec4(textureColor.a,textureColor.a, textureColor.a,1.0);
+					} else {
+						discard;
+					}
+				}
+				else {
+					if (z < -278.0) { //mod(z, 7.0) < 6.0) { 
+						gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+					} else {
+						discard;
+					}
+				}
+			} else {
+				vec3 normal = normalize(v_normal);
+				float product = dot(normal, (u_normalCameraView * vec4(u_lightDirection, 0.0)).xyz);
+				float shadowSourceHeight = texture2D(u_levelShadowMap, vec2((v_globalPosition.x)/ u_levelSize.x, (v_globalPosition.z) / u_levelSize.z)).r;
+				float dynamicShadowHeight = texture2D(u_dynamicShadowMap, vec2(0.0, 1.0) + vec2(1.0,-1.0) * (v_globalPosition.xz - u_dynamicShadowMapPosition.xz + 170.0)/350.0).r / 1000.0 / u_levelSize.y;
+				if (dynamicShadowHeight > 0.0) 
+					shadowSourceHeight = max(dynamicShadowHeight + u_dynamicShadowMapPosition.y / u_levelSize.y, shadowSourceHeight);
+				float shadowCoefficient = max(0.0,min(1.0,(v_globalPosition.y - shadowSourceHeight * u_levelSize.y) / 10.0 + 1.0));
+				product *= shadowCoefficient;
+				gl_FragColor = u_ambientLightColor + u_lightColor * max(0.0, product);
+	//			gl_FragColor += pow(length(normal.xy), 9.0) * vec4(0.1,0.0,0.0,1.0) * 1.0;
+				gl_FragColor *= texture2D(u_diffuseMap, v_texCoords);
+////			gl_FragColor += texture2D(u_dynamicShadowMap, (v_globalPosition.xz - u_dynamicShadowMapPosition.xz)/100.0);
+	//			gl_FragColor.r = shadowSourceHeight;
+				product = dot(reflect((u_normalCameraView * vec4(u_lightDirection,0.0)).xyz, (vec4(-normal,0.0)).xyz), (vec4(0.0, 0.0, -1.0, 0.0)).xyz);
+				gl_FragColor += pow(max(0.0, product), 30.0) * u_lightColor * shadowCoefficient;			
+	//			gl_FragColor += texture2D(u_diffuseMap, (normal.xy + 1.0) / 2.0) * pow(length(normal.xy), 10.0);
+				//gl_FragColor = vec4(v_worldPosition.y / 256.0, 1.0, 1.0, 1.0);
+				float fog = pow(v_localPosition.z / 1700.0, 2.0);
+				gl_FragColor *= (1.0 - fog);
+				gl_FragColor += fog * u_ambientLightColor + pow(1.0 - length(normal.xy), 25.0) * 3.0/10.0;
+				gl_FragColor = vec4(gl_FragColor.rgb, 1.0);
+			}
+		}
+	"
+}
