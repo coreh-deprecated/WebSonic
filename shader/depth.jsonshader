@@ -1,0 +1,66 @@
+{"uniforms": [ "u_cameraView",
+					"u_modelView",
+					"u_projection" ],
+	"attributes": ["a_position"],
+	"vertexShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+	
+		attribute vec3 a_position;
+		attribute vec3 a_normal;
+		attribute vec2 a_texCoords;
+	
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_projection;
+		uniform mat4 u_normalCameraView;		
+		uniform mat4 u_normalModelView;
+
+		uniform sampler2D u_diffuseMap;
+	
+		varying vec2 v_texCoords;
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+	
+		void main(void) {
+			v_globalPosition = u_modelView * vec4(a_position, 1.0);
+			v_localPosition = u_cameraView * v_globalPosition;
+			gl_Position = u_projection * v_localPosition;
+		}	
+	",
+	"fragmentShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec2;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+		varying vec2 v_texCoords;
+		
+		uniform sampler2D u_levelShadowMap;
+		uniform sampler2D u_diffuseMap;
+		uniform sampler2D u_ghostMap;
+		uniform vec3 u_levelSize;		
+		uniform vec3 u_lightDirection;
+		uniform vec4 u_lightColor;
+		uniform vec4 u_ambientLightColor;
+		uniform vec3 u_playerPosition;
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_normalCameraView;		
+		uniform float u_time;
+
+		void main(void) {
+			gl_FragColor = vec4(-v_localPosition.z/1000.0, -v_localPosition.z/1000.0, -v_localPosition.z/1000.0, 1.0);
+			gl_FragColor = vec4(1.0 -gl_FragColor.rgb, 1.0);
+		}
+	"
+}
