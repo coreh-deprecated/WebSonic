@@ -51,9 +51,14 @@ var ResourceManager = function(engine){
 							throw e;
 						}
 					}
-					var mesh = new engine.gfx.Mesh(data);
-					loadedResources[path] = mesh;
-					totalPending--;	
+					try {
+						var mesh = new engine.gfx.Mesh(data);
+						loadedResources[path] = mesh;
+						totalPending--;	
+					} catch (e) {
+						console.error(e.message + e.stack)
+						throw e;
+					}
 				} });
 			break;
 			case "jsonshader":
@@ -71,9 +76,14 @@ var ResourceManager = function(engine){
 							throw e;
 						}
 					}
-					var shader = new engine.gfx.Shader(data, path);
-					loadedResources[path] = shader;
-					totalPending--;
+					try {
+						var shader = new engine.gfx.Shader(data, path);
+						loadedResources[path] = shader;
+						totalPending--;
+					} catch (e) {
+						console.error(e.message + e.stack)
+						throw e;
+					}
 				} });				
 			break;
 			case "jsonlevel":
@@ -91,9 +101,14 @@ var ResourceManager = function(engine){
 							throw e;
 						}
 					}
-					var level = new engine.gfx.Level(data, path);
-					loadedResources[path] = level;
-					totalPending--;
+					try {
+						var level = new engine.gfx.Level(data, path);
+						loadedResources[path] = level;
+						totalPending--;
+					} catch (e) {
+						console.error(e.message + e.stack)
+						throw e;
+					}
 				} });
 			break;
 		}
