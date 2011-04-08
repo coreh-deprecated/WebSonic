@@ -1,4 +1,4 @@
-if (!window.console) {
+//if (!window.console) {
 	window.console = {};
 	window.console.initialTime = (new Date()).getTime();
 	window.console.log = function(message){
@@ -20,10 +20,10 @@ if (!window.console) {
 		$("#log")[0].appendChild(div);
 		$("#console").attr({ scrollTop: $("#console").attr("scrollHeight") }, 3000);
 		setTimeout(function(){
-			$(div).fadeOut(2000,function(){
+			$(div).fadeOut(1000,function(){
 				div.parentNode.removeChild(div);
 			});
-		}, 5000);			
+		}, 2000);			
 	}
 	window.console.error = function(message){
 		var div = document.createElement("div");
@@ -44,4 +44,4 @@ if (!window.console) {
 			});
 		}, 10000);			
 	}		
-}
+//}
