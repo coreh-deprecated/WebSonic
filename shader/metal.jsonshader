@@ -1,5 +1,6 @@
 {"uniforms": [ "u_cameraView",
 					"u_modelView",
+					"u_normalCameraView",
 					"u_normalModelView",
 					"u_projection",
 					"u_diffuseMap",
@@ -71,7 +72,7 @@
 				gl_FragColor = texture2D(u_diffuseMap, vec2(nn.x,-nn.y)/2.0 + (1.0/2.0));
 			}
 			
-			gl_FragColor = vec4(1.0,1.0,1.0,1.0);
+//			gl_FragColor = vec4(1.0,1.0,1.0,1.0);
 //			float dotp = dot(reflect((u_normalCameraView * vec4(u_lightDirection,0.0)).xyz, (vec4(-normal,0.0)).xyz), (vec4(0.0, 0.0, -1.0, 0.0)).xyz);
 //			gl_FragColor += pow(dotp, 30.0) * u_lightColor;			
 //			gl_FragColor += texture2D(u_diffuseMap, (normal.xy + 1.0) / 2.0) * pow(length(normal.xy), 10.0);
