@@ -25,6 +25,7 @@
 					yaw = oldYaw + (e.clientX - oldX) * 0.01;
 				}
 			}, false);*/
+			engine.resources.load("mesh/sky.jsonmesh");
 			engine.resources.load("mesh/monitor.jsonmesh");		
 			engine.resources.load("mesh/spinball.jsonmesh")
 			engine.resources.load("mesh/sonic.jsonmesh");	
@@ -42,7 +43,9 @@
 							engine.world.add(camera);
 							camera.position($V([128,512,512]));
 							var level = engine.world.LevelEntity(engine.resources.get("level/lvl0.jsonlevel"));
-							engine.world.add(level);				
+							engine.world.add(level);			
+							var sky = new Sky(engine, camera);
+							engine.world.add(sky);	
 						/*	for (var c = 0; c<32; c++) {
 								var ring = Ring(engine, player, level);
 								ring.position($V([1536/2, 64, 64]));

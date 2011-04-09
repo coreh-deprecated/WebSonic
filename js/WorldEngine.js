@@ -178,14 +178,13 @@ var WorldEngine = function(engine) {
 		if (!colorTarget) {
 			colorTarget = new engine.gfx.RenderTarget();
 		}
-		
+
 		cameras.forEach(function(camera) {
-			
 			renderShadows(camera);
-			//colorTarget.activate();
-			engine.gfx.gl.clearColor(0,0,0,0);
+//			colorTarget.activate();
+//			engine.gfx.gl.clearColor(40/256.0,124/256.0,235/256.0,1.0);
 			engine.gfx.clear();
-			//engine.gfx.gl.clearColor(0.0, 0.0, 0.0, 0.0);
+			engine.gfx.gl.clearColor(0.0, 0.0, 0.0, 0.0);
 			uniforms.u_dynamicShadowMap = shadowMapTarget.texture();
 			uniforms.u_dynamicShadowMapPosition = shadowMapPosition;
 			var renderParams = {
@@ -198,8 +197,11 @@ var WorldEngine = function(engine) {
 //				shader: engine.resources.get("shader/depth.jsonshader")
 			};
 			removalFlag = false;
+			var renderList = [];
+
 			for (var i = 0; i < entities.length; i++) {
-				entities[i].render(renderParams);//inversedCameraModelView);
+				renderList.push(entities[i]);
+				//entities[i].render(renderParams);//inversedCameraModelView);
 				if (removalFlag) {
 					i--;
 					removalFlag = false;
@@ -218,7 +220,8 @@ var WorldEngine = function(engine) {
 						var bucket = buckets[[x,y,z]];
 						if (bucket) {
 							for (var i = 0; i < bucket.length; i++) {
-								bucket[i].render(renderParams);
+								renderList.push(bucket[i]);
+								//bucket[i].render(renderParams);
 								if (removalFlag) {
 									i--;
 									removalFlag = false;
@@ -228,12 +231,30 @@ var WorldEngine = function(engine) {
 					}
 				}
 			}
-			
-			
-			//colorTarget.deactivate();	
-			//engine.gfx.clear();		
-			//colorTarget.renderToScreen();
-			
+
+			renderList.sort(function(a,b){
+				if (!a.layer)
+					a.layer = 0;
+				if (!b.layer)
+					b.layer = 0;
+				return a.layer - b.layer;
+			})
+
+			if (renderList.length > 0) {
+				var lastLayer = renderList[0].layer;
+				for (var i in renderList) {
+					if (lastLayer != renderList[i].layer) {
+						engine.gfx.clearDepth();
+						lastLayer = renderList[i].layer;
+					}
+					renderList[i].render(renderParams);
+				}
+			}
+
+//			colorTarget.deactivate();	
+//			engine.gfx.clear();		
+//			colorTarget.renderToScreen();
+
 			engine.gfx.gl.finish();
 		});
 	}

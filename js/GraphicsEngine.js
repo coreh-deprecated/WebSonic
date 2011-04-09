@@ -33,6 +33,15 @@ var GraphicsEngine = function(engine, canvas) {
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);	
 	}
 	
+	graphicsEngine.clearColor = function(){
+		gl.clear(gl.COLOR_BUFFER_BIT);	
+	}
+	
+	graphicsEngine.clearDepth = function(){
+		gl.clear(gl.DEPTH_BUFFER_BIT);	
+	}
+	
+	
 	graphicsEngine.width = function() {
 		return canvas.width;
 	}

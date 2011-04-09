@@ -1,0 +1,85 @@
+{"uniforms": [ "u_cameraView",
+					"u_normalCameraView",
+					"u_modelView",
+					"u_normalModelView",
+					"u_projection",
+					"u_cloudMap",
+					"u_time"
+					],
+	"attributes": ["a_position", "a_normal", "a_texCoords"],
+	"vertexShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+	
+		attribute vec3 a_position;
+		attribute vec3 a_normal;
+		attribute vec2 a_texCoords;
+	
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_projection;
+		uniform mat4 u_normalCameraView;		
+		uniform mat4 u_normalModelView;
+
+		uniform sampler2D u_diffuseMap;
+	
+		varying vec2 v_texCoords;
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+		varying vec4 v_originalPosition;
+	
+		void main(void) {
+			v_texCoords = a_texCoords;
+			v_normal = (u_normalCameraView * (u_normalModelView * vec4(a_normal, 0.0))).xyz;
+			v_originalPosition = vec4(a_position, 1.0);
+			v_globalPosition = u_modelView * vec4(a_position, 1.0);
+			v_localPosition = u_cameraView * v_globalPosition;
+			gl_Position = u_projection * v_localPosition;
+		}	
+	",
+	"fragmentShader": "
+		#ifdef GL_ES
+		precision highp float;
+		precision highp vec2;
+		precision highp vec3;
+		precision highp vec4;
+		#endif
+
+		varying vec3 v_normal;
+		varying vec4 v_globalPosition;
+		varying vec4 v_localPosition;
+		varying vec2 v_texCoords;
+		varying vec4 v_originalPosition;
+		
+		uniform sampler2D u_cloudMap;
+		uniform mat4 u_cameraView;
+		uniform mat4 u_modelView;
+		uniform mat4 u_normalCameraView;		
+		uniform float u_time;
+
+		void main(void) {
+				vec3 normal = normalize(v_normal);
+				float t_time = u_time * 3.0;
+				gl_FragColor = texture2D(u_cloudMap, v_originalPosition.xz / 10.0 + vec2(t_time/100.0, t_time/10.0) + vec2(cos(v_originalPosition.x/5.0+v_originalPosition.z/5.0+t_time/50.0),sin(v_originalPosition.x/5.0+v_originalPosition.z/5.0+t_time/100.0))/8.0);
+				gl_FragColor *= texture2D(u_cloudMap, v_originalPosition.xz / 15.0 + vec2(t_time/20.0, t_time/40.0) + vec2(cos(v_originalPosition.x/2.0+v_originalPosition.z/3.0+t_time/20.0+1.0),sin(v_originalPosition.x/3.0+v_originalPosition.z/2.0+t_time/50.0+1.0))/12.0);
+				gl_FragColor *= texture2D(u_cloudMap, v_originalPosition.xz / 20.0 + vec2(t_time/80.0, t_time/70.0) + vec2(cos(v_originalPosition.x/8.0+v_originalPosition.z/4.0+t_time/100.0+2.0),sin(v_originalPosition.x/4.0+v_originalPosition.z/8.0+t_time/20.0+2.0))/20.0);
+				gl_FragColor *= texture2D(u_cloudMap, v_originalPosition.xz / 50.0 + vec2(t_time/40.0, t_time/20.0));
+				gl_FragColor *= abs(v_originalPosition.y/10.0);
+				gl_FragColor = min(max(gl_FragColor, 1.0/5.0), 3.0/4.0) - 1.0/5.0;
+				gl_FragColor += 1.0/abs(v_originalPosition.y/5.0);
+				gl_FragColor *= 10.0/13.0;
+				gl_FragColor += vec4(1.0/5.0,1.0/3.0,4.0/5.0,0.0);
+//				gl_FragColor += vec4(3.0/5.0,1.0/3.0,1.0/10.0,0.0);
+				gl_FragColor += vec4(3.0/50.0,1.0/30.0,1.0/10.0,0.0) * 2.0;
+				gl_FragColor = min(gl_FragColor, 1.0);
+//				if (v_originalPosition.y < 0.0) {
+//					gl_FragColor *= vec4(10.0,10.0,10.0,1.0) / abs(v_originalPosition.y);
+//				}
+				gl_FragColor = vec4(gl_FragColor.rgb, 1.0);
+		}
+	"
+}
