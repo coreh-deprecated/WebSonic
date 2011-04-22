@@ -1,5 +1,4 @@
 {"uniforms": [ "u_cameraView",
-					"u_normalCameraView",
 					"u_modelView",
 					"u_normalModelView",
 					"u_projection",
