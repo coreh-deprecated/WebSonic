@@ -93,7 +93,7 @@ var GraphicsEngine = function(engine, canvas) {
 		shaderData.uniforms.forEach(function(uniform){
 			uniforms[uniform] = gl.getUniformLocation(program, uniform);
 			if (!uniforms[uniform]) {
-				throw new Error("Nonexistent or unused uniform in the description of shader " + shaderName + ": " + uniform);
+				console.warn("Nonexistent or unused uniform in the description of shader " + shaderName + ": " + uniform);
 			}
 		});
 	
@@ -103,7 +103,7 @@ var GraphicsEngine = function(engine, canvas) {
 		shaderData.attributes.forEach(function(attribute){
 			attributes[attribute] = gl.getAttribLocation(program, attribute);
 			if (attributes[attribute] == -1) {
-				throw new Error("Nonexistent or unused attribute in the description of shader " + shaderName + ": " + attribute);
+				console.warn("Nonexistent or unused attribute in the description of shader " + shaderName + ": " + attribute);
 			}
 		});
 	
