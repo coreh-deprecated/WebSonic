@@ -64,7 +64,7 @@ var GraphicsEngine = function(engine, canvas) {
 		gl.compileShader(vertexShader);
 	
 		if (!gl.getShaderParameter(vertexShader, gl.COMPILE_STATUS)) {
-			throw new Error("Error compiling vertex shader: " + gl.getShaderInfoLog(fragmentShader));
+			throw new Error("Error compiling vertex shader: " + gl.getShaderInfoLog(vertexShader));
 		}
 	
 		// Compile the fragment shader
