@@ -63,7 +63,8 @@
 							
 							clearInterval(interval);
 							var alpha = 0.0;
-							interval = setInterval( function () {	
+							var updateFunc;
+							interval = requestAnimationFrame( updateFunc = function () {
 								alpha += 0.1;
 								if ($(window).width() != canvas.width || $(window).height() != canvas.height) {
 									canvas.width = $(window).width();
@@ -85,11 +86,12 @@
 								engine.world.render();
 								var seconds = engine.world.time();
 								$("#time")[0].innerHTML = Math.floor(seconds / 60) + ":" + ((Math.floor(seconds) % 60 < 10)?"0":"") +  Math.floor(seconds) % 60;
+								requestAnimationFrame(updateFunc);
 								} catch(e) {
 									console.error(e.message + e.stack);
-									clearInterval(interval);
-								} 
-							}, 1000.0/60.0 );
+									//clearInterval(interval);
+								}
+							});
 						}					
 			/*		} catch (e) {
 						console.error(e.message);
