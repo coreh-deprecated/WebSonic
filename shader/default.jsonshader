@@ -17,8 +17,6 @@
 	"vertexShader": "
 		#ifdef GL_ES
 		precision highp float;
-		precision highp vec3;
-		precision highp vec4;
 		#endif
 	
 		attribute vec3 a_position;
@@ -51,9 +49,6 @@
 	"fragmentShader": "
 		#ifdef GL_ES
 		precision highp float;
-		precision highp vec2;
-		precision highp vec3;
-		precision highp vec4;
 		#endif
 
 		varying vec3 v_normal;

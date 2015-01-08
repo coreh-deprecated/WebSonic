@@ -3,8 +3,6 @@
 	"vertexShader": "
 		#ifdef GL_ES
 		precision highp float;
-		precision highp vec3;
-		precision highp vec4;
 		#endif
 	
 		uniform sampler2D u_image;
@@ -22,9 +20,6 @@
 	"fragmentShader": "
 		#ifdef GL_ES
 		precision highp float;
-		precision highp vec2;
-		precision highp vec3;
-		precision highp vec4;
 		#endif
 
 		uniform sampler2D u_image;
